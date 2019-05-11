@@ -1,0 +1,34 @@
+#include "hello.h"
+
+int keystate[300];
+
+/* (Deprecated) Function to Check for key presses */
+void key_pressed(unsigned char key, int x, int y)
+{
+    if (key == ESCAPE) {
+        glutDestroyWindow(window);
+        exit(0);
+    }
+    if(key == 'r'){
+        state_reset();
+    }
+    if(key == 'a')
+        triangle.x += .1;
+    if(key == 'd')
+        triangle.x -= .1;
+    if(key == 'w')
+        triangle.y -= .1;
+    if(key == 's')
+        triangle.y += .1;
+}
+
+void skey_down(int key, int x, int y)
+{
+    keystate[key] = 1;
+}
+
+void skey_up(int key, int x, int y)
+{
+    keystate[key] = 0;
+}
+

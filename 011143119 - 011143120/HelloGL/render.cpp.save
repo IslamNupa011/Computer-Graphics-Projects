@@ -1,0 +1,269 @@
+#include "hello.h"
+
+int dox;
+int doy;
+int ballcount = 5;
+int cloudcount = 1;
+float crate = 25;
+float changerate = 0.007 * 5;
+int score = 0;
+char scorestr[1000];
+int over = 0;
+int currentFPS;
+
+object triangle;
+object rectangle;
+object balls[100];
+object *control;
+object clouds[100];
+
+char *playertex = "player2.bmp";
+char *balltex = "enemy.bmp";
+char *cloudtex = "cloud2.bmp";
+
+//
+int framecount;
+int lasttime;
+int currenttime;
+int fps;
+long timestamp;
+int frame;
+int timebase;
+int timenow;
+
+/* Initialize  */
+void init_gl(int Width, int Height)
+{
+    glClearColor(0.0f, 1.0f, 0.5f, 0.0f);
+    glClearDepth(1.0);
+    glDepthFunc(GL_LESS);
+    glEnable(GL_DEPTH_TEST);
+    glShadeModel(GL_SMOOTH);
+    glEnable(GL_BLEND);
+    glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+
+    gluPerspective(45.0f,(GLfloat)Width/(GLfloat)Height,0.1f,100.0f);
+
+    glMatrixMode(GL_MODELVIEW);
+    // Skeleton Code Ends Here
+    int i, j;
+
+    /*Create The Plane*/
+    create_object(&rectangle, 0, 2.5, 0, GL_QUADS, 4, 0.5f, playertex);
+    control = &rectangle; //Set the default control as the plane
+
+    /*Create The Balls*/
+    for(i = 0; i < ballcount; i++){
+        create_ball(&balls[i], 10, 10, 0, GL_QUADS, 4, 0.15, balltex);
+    }
+
+    /*Create The Clouds*/
+    int cld = 0;
+    for(i = 0; i <= 2; i += 2){
+        for(j = -5; j < 7; j++){
+            create_object(&clouds[cld], i, j *.9, 0, GL_QUADS, 4, 0.5, cloudtex);
+            clouds[cld].texture = load_texture(cloudtex, 360, 148);
+            set_vertex(clouds[cld].vertex[0], -0.0f, -0.0f, 0.0f);
+            set_vertex(clouds[cld].vertex[1],  2.0f, -0.0f, 0.0f);
+            set_vertex(clouds[cld].vertex[2],  2.0f,  1.0f, 0.0f);
+            set_vertex(clouds[cld].vertex[3], -0.0f,  1.0f, 0.0f);
+            cld += 1;
+        }
+    }
+    cloudcount = cld + 1;
+
+    /*Create The initial Time Stamp*/
+    srand(time(NULL));
+    timestamp = clock();
+
+    currentFPS = MAX_FPS;
+    timebase = glutGet(GLUT_ELAPSED_TIME);
+    glutTimerFunc(1000/currentFPS, update, 1);
+    state_reset();
+}
+
+/*The Function called when the window is resized*/
+void resize_glscene(int Width, int Height)
+{
+    if (Height==0)
+        Height=1;
+
+    glViewport(0, 0, Width, Height);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+
+    gluPerspective(45.0f,(GLfloat)Width/(GLfloat)Height,0.1f,100.0f);
+    glMatrixMode(GL_MODELVIEW);
+}
+
+/*The Main Game state*/
+void draw_mainscene()
+{
+    /*Adjust the Speed to match the FPS*/
+    frame++;
+    timenow = glutGet(GLUT_ELAPSED_TIME);
+
+    if(timenow - timebase > 1000){
+        currentFPS = frame / ((timenow - timebase) / 1000.0f);
+        currentFPS = (currentFPS < MAX_FPS) ? currentFPS : MAX_FPS;
+        timebase = timenow;
+        frame = 0;
+    }
+
+    printf("%d\n", currentFPS); //Debug
+
+    /*Start Drawing the objects*/
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glLoadIdentity();
+
+    glTranslatef(float(dox), float(doy), -6.0f);
+
+    /*Draw the Objects(Clouds, Balls and The plane)*/
+    draw_object_arr(clouds, cloudcount);
+    draw_object_arr(balls, ballcount);
+    draw_object(&rectangle);
+
+    /*Set Depth Testing On*/
+    glEnable(GL_DEPTH_TEST);
+    glDepthMask(GL_TRUE);
+    glDepthFunc(GL_LEQUAL);
+
+    /*The Scoreboard*/
+    write_text(scorestr, 1, 2.3);
+}
+
+/*The Game over State*/
+void draw_gameover_scene()
+{
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glLoadIdentity();
+    glTranslatef(float(dox), float(doy), -6.0f);
+
+    /*Draw only The Clouds*/
+    draw_object_arr(clouds, cloudcount);
+
+    glEnable(GL_DEPTH_TEST);
+    glDepthMask(GL_TRUE);
+    glDepthFunc(GL_LEQUAL);
+
+    /*Display the final score and the Game over screen*/
+    write_text(scorestr, 1, 2.3);
+    write_text("Game Over!!", -.25, 0);
+}
+
+/*The scene picker*/
+void render_scene()
+{
+    if(over == 1)
+        draw_gameover_scene();
+    else
+        draw_mainscene();
+}
+
+/*Function for the update Loop*/
+void update(int flag)
+{
+    /* Delay the function to match the FPS */
+    glutTimerFunc(1000/currentFPS, update, 1);
+
+    position_update();
+    collision_update();
+    counter_update();
+
+    /* Render to the screen */
+    glutSwapBuffers();
+}
+
+/*Function to update The score*/
+void counter_update()
+{
+    framecount += 1;
+    if(framecount % 500 == 0)
+        changerate = changerate + 0.02;
+    if(over != 1)
+        score += 1;
+    sprintf(scorestr,"Score: %d", score / 40);
+}
+
+/*Function to update the position of the Objects*/
+void position_update()
+{
+    /*Check which keys are pressed*/
+    if(keystate[GLUT_KEY_UP] == 1){
+        control->y -= .1;
+    }
+    if(keystate[GLUT_KEY_DOWN] == 1){
+        control->y += .1;
+    }
+    if(keystate[GLUT_KEY_LEFT] == 1){
+        control->x += .1;
+    }
+    if(keystate[GLUT_KEY_RIGHT] == 1){
+        control->x -= .1;
+    }
+    /* Boundary checking for the player */
+    if(control->x > 2)
+        control->x = 2;
+    if(control->x < -1)
+        control->x = -1;
+    if(control->y > 2.5)
+        control->y = 2.5;
+    if(control->y < -1.5)
+        control->y = -1.5;
+
+    /* Move the Balls Down The screen */
+    int i;
+    for(i = 0; i < ballcount; i++){
+        balls[i].y += changerate;
+        /* Move them back up if they fall below the screen */
+        if(balls[i].y > 5){
+            balls[i].x += rand() % 10;
+            if(balls[i].x > 3)
+                balls[i].x = -(rand() % 3);
+            balls[i].y = -4;
+            if(rand() % 2 == 0)
+                balls[i].y += 1;
+        }
+
+    }
+    /* Move the Clouds down The screen*/
+    for(i = 0; i < cloudcount; i++){
+        clouds[i].y += changerate / 4;
+        if(clouds[i].y > 6){
+            clouds[i].y -= 10;
+        }
+    }
+}
+
+/* Function to check for collisions */
+void collision_update()
+{
+    /* Check for collision between player and each ball */
+    int i;
+    for(i = 0; i < ballcount; i++){
+        if(check_collision(control, &balls[i]) == 1){
+            over = 1;
+        }
+    }
+}
+
+/* Function to reset the game to its initial position */
+void state_reset()
+{
+    int i;
+    /* Default Position for the player */
+    control->x = 0.0f;
+    control->y = 2.5f;
+    /* Default Position for the Balls */
+    for(i = 0; i < ballcount; i++)
+        balls[i].x = 10, balls[i].y = 10;
+    score = 0;
+    over = 0;
+    framecount = 0;
+    changerate = .007 * 5;
+    glDisable(GL_LIGHTING);
+    glColor3f(0.0f, 0.0, 0.0);
+}

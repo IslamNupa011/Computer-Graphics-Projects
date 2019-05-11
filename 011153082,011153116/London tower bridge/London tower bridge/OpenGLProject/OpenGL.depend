@@ -1,0 +1,20 @@
+# depslib dependency file v1.0
+1536155465 source:c:\users\hp\desktop\openglproject\graphics_2.cpp
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	<Windows.h>
+	<glut.h>
+
+1392007564 c:\users\hp\desktop\openglproject\opengl\include\glut.h
+	<windows.h>
+	<GL/gl.h>
+	<GL/glu.h>
+
+1536597294 source:c:\users\alpona\desktop\openglproject\openglproject\graphics_2.cpp
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	<windows.h>
+	<GL/glut.h>
+

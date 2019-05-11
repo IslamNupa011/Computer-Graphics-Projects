@@ -1,0 +1,22 @@
+#include "hello.h"
+
+int window;
+
+int main(int argc, char **argv)
+{
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_ALPHA | GLUT_DEPTH);
+    glutInitWindowSize(540, 680);
+    glutInitWindowPosition(0, 0);
+    window = glutCreateWindow("HelloGL!!");
+    glutDisplayFunc(&draw_glscene);
+    glutIdleFunc(&draw_glscene);
+    glutReshapeFunc(&resize_glscene);
+    glutSetKeyRepeat(0);
+    glutKeyboardFunc(&key_pressed);
+    glutSpecialFunc(&skey_down);
+    glutSpecialUpFunc(&skey_up);
+    init_gl(6540, 480);
+    glutMainLoop();
+    return 1;
+}

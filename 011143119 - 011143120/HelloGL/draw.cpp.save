@@ -1,0 +1,132 @@
+#include "hello.h"
+
+/* Function to load a Texture */
+int load_texture(const char *filename, int width, int height)
+{
+    int tsize = width * height;
+    GLuint texture;
+    unsigned char *data;
+    FILE *file;
+
+    /* Allocate a buffer to hold the data */
+    data = (unsigned char*) malloc(tsize * sizeof(unsigned char*));
+
+    /* Open the texture file */
+    file = fopen(filename, "rb");
+    if(file == NULL) {
+        fprintf(stderr, "texture not found");
+        return 0;
+    }
+
+    /* Read the file into the buffer */
+    fread(data, tsize * sizeof(unsigned char*), 1, file);
+    fclose(file);
+
+    /* Adjust the RGBA values to match OpenGL parameters */
+    int i;
+    int index, t;
+    for(i = 0; i < tsize; i++) {
+        index = i * 4;
+        t = data[index + 2];
+        data[index + 2] = data[index + 3];
+        data[index + 3] = t;
+        t = data[index + 0];
+        data[index + 0] = data[index + 1];
+        data[index + 1] = t;
+        // (DEBUG) printf("%d %d %d %d\n", data[index], data[index + 1], data[index + 2], data[index + 3]);
+
+    }
+
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_DECAL);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_DECAL);
+
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+    gluBuild2DMipmaps(GL_TEXTURE_2D, 4, width, height, GL_RGBA, GL_UNSIGNED_BYTE, data);
+    //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+
+    free(data);
+
+    return texture;
+}
+
+/* Function to create An Object */
+void create_object(object *a, float x, float y, float z, int shape, int total, float radius, const char *texname)
+{
+    a->shape = shape;
+    a->total = total;
+    a->x = x;
+    a->y = y;
+    a->z = z;
+    a->radius = radius;
+    a->texture = load_texture(texname, 256, 256);
+    set_vertex(a->vertex[0], -0.0f, -0.0f, 0.0f);
+    set_vertex(a->vertex[1],  1.0f, -0.0f, 0.0f);
+    set_vertex(a->vertex[2],  1.0f,  1.0f, 0.0f);
+    set_vertex(a->vertex[3], -0.0f,  1.0f, 0.0f);
+}
+
+/* Function to create the Ball */
+void create_ball(object *a, float x, float y, float z, int shape, int total, float radius, const char *texname)
+{
+    create_object(a, x, y, z, shape, total, radius, balltex);
+    set_vertex(a->vertex[0],  0.25f,  0.25f, 0.0f);
+    set_vertex(a->vertex[1],  0.75f,  0.25f, 0.0f);
+    set_vertex(a->vertex[2],  0.75f,  0.75f, 0.0f);
+    set_vertex(a->vertex[3],  0.25f,  0.75f, 0.0f);
+}
+
+/* Function to set the Values of a vertex array */
+void set_vertex(float *vertex, float v0, float v1, float v2)
+{
+    vertex[0] = v0;
+    vertex[1] = v1;
+    vertex[2] = v2;
+}
+
+/* Function
+void draw_object(object *a)
+{
+    int i, j;
+    int vcount;
+    glBindTexture(GL_TEXTURE_2D, a->texture);
+    glEnable(GL_TEXTURE_2D);
+    glBegin(a->shape);
+    glNormal3f(0.0, 0.0, 1.0);
+    i = 0, j = 0;
+    for(vcount = 0; vcount < a->total; vcount++) {
+        glTexCoord2d(i % 2 + .07, j % 2);
+        glVertex3f(a->vertex[vcount][0] - a->x, a->vertex[vcount][1] - a->y, a->vertex[vcount][2] - a->z);
+        if(vcount % 2 == 0)
+            i++;
+        else
+            j++;
+    }
+    glEnd();
+    glDisable(GL_TEXTURE_2D);
+}
+
+void write_text(char *str, float x, float y)
+{
+    int len, i;
+    glRasterPos2f(x, y);
+    for(i = 0; str[i] != '\0'; i++){
+        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, str[i]);
+    }
+}
+
+
+
+void draw_object_arr(object *a, int objcount)
+{
+    int i;
+    for(i = 0; i < objcount; i++)
+        draw_object(&a[i]);
+}

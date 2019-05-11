@@ -1,0 +1,1 @@
+#include <stdio.h> #include <conio.h> int id_search(int id_ser) struct student_information { int id; char name[100]; float cgpa; }; int main(void) { struct student_information s[3]; int i; for(i = 0; i < 3; i++) { printf("\nId : "); scanf("%d", &s[i].id); printf("\nName : "); gets(s[i].name); printf("\nCGPA : "); scanf("%f", &s[i].cgpa); } getch(); return 0; } 

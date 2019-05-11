@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="HelloGL" />
+		<Option pch_mode="0" />
+		<Option compiler="gcc" />
+		<Build>
+			<Script file="lib_finder.script" />
+			<Target title="Debug">
+				<Option platforms="Windows;" />
+				<Option output="bin/Debug/HelloGL" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Option use_console_runner="0" />
+				<Compiler>
+					<Add directory="extra/freeglut/include" />
+				</Compiler>
+				<Linker>
+					<Add option="-lOpenGL32 -lglu32 -lfreeglut" />
+					<Add directory="extra/freeglut/lib" />
+				</Linker>
+			</Target>
+			<Target title="Release">
+				<Option platforms="Windows;" />
+				<Option output="bin/Release/HelloGL" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="0" />
+				<Option compiler="gcc" />
+				<Option projectCompilerOptionsRelation="0" />
+				<Option projectLinkerOptionsRelation="0" />
+				<Option projectIncludeDirsRelation="0" />
+				<Option projectResourceIncludeDirsRelation="0" />
+				<Option projectLibDirsRelation="0" />
+				<Compiler>
+					<Add option="-Wall" />
+				</Compiler>
+			</Target>
+			<Target title="Dbg">
+				<Option platforms="Unix;" />
+				<Option output="bin/Dbg/HelloGL" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Dbg/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Option use_console_runner="0" />
+				<Linker>
+					<Add option="-lGL -lGLU -lglut" />
+				</Linker>
+			</Target>
+			<Target title="Cross-Dbg">
+				<Option output="bin/Cross-Dbg/HelloGL" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Cross-Dbg/" />
+				<Option type="0" />
+				<Option compiler="gcc" />
+			</Target>
+			<Target title="Dbg-32">
+				<Option platforms="Unix;" />
+				<Option output="bin/Dbg-32/HelloGL" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Dbg-32/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Option use_console_runner="0" />
+				<Compiler>
+					<Add option="-m32" />
+				</Compiler>
+				<Linker>
+					<Add option="-lGL -lGLU -lglut -m32" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+		</Compiler>
+		<Unit filename="collision.cpp" />
+		<Unit filename="draw.cpp" />
+		<Unit filename="events.cpp" />
+		<Unit filename="hello.h" />
+		<Unit filename="main.cpp" />
+		<Unit filename="render.cpp" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

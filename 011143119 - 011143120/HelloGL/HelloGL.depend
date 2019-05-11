@@ -1,0 +1,142 @@
+# depslib dependency file v1.0
+1357021327 source:/home/unchar/dev/cpp/cb/Assignments/HelloGL/LUtil.cpp
+	"LUtil.h"
+
+1425277412 
+
+1357021327 /home/unchar/dev/cpp/cb/Assignments/HelloGL/LUtil.h
+	"LOpenGL.h"
+	<stdio.h>
+
+1357021327 /home/unchar/dev/cpp/cb/Assignments/HelloGL/LOpenGL.h
+	<GL/freeglut.h>
+	<GL/gl.h>
+	<GL/glu.h>
+	<stdio.h>
+
+1430315371 source:/home/unchar/dev/cpp/cb/Assignments/HelloGL/main.cpp
+	<GL/glut.h>
+	<GL/gl.h>
+	<GL/glu.h>
+	<stdio.h>
+	"hello.h"
+	"hello.h"
+
+1425276679 source:c:\users\shadab\downloads\hellogl\hellogl\main.cpp
+	<GL/glut.h>
+	<GL/gl.h>
+	<GL/glu.h>
+	<stdio.h>
+
+1425277412 c:\users\shadab\downloads\hellogl\hellogl\extra\freeglut\include\gl\glut.h
+	"freeglut_std.h"
+
+1425277412 std.h"
+
+1425277412 c:\users\shadab\downloads\hellogl\hellogl\extra\freeglut\include\gl\freeglut_std.h
+	<windows.h>
+	<OpenGL/gl.h>
+	<OpenGL/glu.h>
+	<GL/gl.h>
+	<GL/glu.h>
+	<stdlib.h>
+
+1425744810 /home/unchar/dev/cpp/cb/Assignments/HelloGL/hello.h
+	<GL/glut.h>
+	<GL/gl.h>
+	<GL/glu.h>
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	<time.h>
+	<GL/glut.h>
+	<GL/gl.h>
+	<GL/glu.h>
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	<time.h>
+
+1425593772 source:/home/unchar/dev/cpp/cb/Assignments/HelloGL/draw.cpp
+	"hello.h"
+	"hello.h"
+
+1430315133 source:/home/unchar/dev/cpp/cb/Assignments/HelloGL/render.cpp
+	"hello.h"
+	"hello.h"
+
+1425483276 source:/home/unchar/dev/cpp/cb/Assignments/HelloGL/events.cpp
+	"hello.h"
+	"hello.h"
+
+1430315344 source:/home/unchar/dev/cpp/cb/Assignments/HelloGL/collision.cpp
+	"hello.h"
+	"hello.h"
+
+1425459164 source:g:\hellogl\collision.cpp
+	"hello.h"
+
+1425744810 g:\hellogl\hello.h
+	<GL/glut.h>
+	<GL/gl.h>
+	<GL/glu.h>
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	<time.h>
+
+1425277412 g:\hellogl\extra\freeglut\include\gl\glut.h
+	"freeglut_std.h"
+
+1425277412 g:\hellogl\extra\freeglut\include\gl\freeglut_std.h
+	<windows.h>
+	<OpenGL/gl.h>
+	<OpenGL/glu.h>
+	<GL/gl.h>
+	<GL/glu.h>
+	<stdlib.h>
+
+1425593772 source:g:\hellogl\draw.cpp
+	"hello.h"
+
+1425483276 source:g:\hellogl\events.cpp
+	"hello.h"
+
+1425550888 source:g:\hellogl\main.cpp
+	"hello.h"
+
+1430315344 source:h:\uiu\12th semester\computer graphics laboratory\hellogl\collision.cpp
+	"hello.h"
+
+1536475330 h:\uiu\12th semester\computer graphics laboratory\hellogl\hello.h
+	<GL/glut.h>
+	<GL/gl.h>
+	<GL/glu.h>
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	<time.h>
+
+1425277412 h:\uiu\12th semester\computer graphics laboratory\hellogl\extra\freeglut\include\gl\glut.h
+	"freeglut_std.h"
+
+1425277412 h:\uiu\12th semester\computer graphics laboratory\hellogl\extra\freeglut\include\gl\freeglut_std.h
+	<windows.h>
+	<OpenGL/gl.h>
+	<OpenGL/glu.h>
+	<GL/gl.h>
+	<GL/glu.h>
+	<stdlib.h>
+
+1430316388 source:h:\uiu\12th semester\computer graphics laboratory\hellogl\draw.cpp
+	"hello.h"
+
+1536475717 source:h:\uiu\12th semester\computer graphics laboratory\hellogl\events.cpp
+	"hello.h"
+
+1430315370 source:h:\uiu\12th semester\computer graphics laboratory\hellogl\main.cpp
+	"hello.h"
+
+1536476437 source:h:\uiu\12th semester\computer graphics laboratory\hellogl\render.cpp
+	"hello.h"
+
